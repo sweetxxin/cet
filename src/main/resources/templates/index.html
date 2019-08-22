@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="CET查询">
+    <meta name="author" content="Xxin">
+    <title>四六级成绩查询</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <style>
+        #login, #d1, #d2, #d3, #d4 {
+            visibility: hidden;
+        }
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+            margin-bottom: 10px;
+        }
+        .form-signin .checkbox { font-weight: normal; }
+        .form-signin .form-control {
+            position: relative;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus { z-index: 2; }
+        /*---------------------*/
+        html { height: 100%; }
+        body {
+            overflow: hidden;
+            height: 100%; }
+        #gdpu {
+            display: block;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 70px;
+        }
+        #img { padding: 0px; }
+        #grade {
+            background-color: #fff;
+            border-radius: 15px;
+            font-size: 20px;
+            z-index: 200;
+            position: relative;
+        }
+        .center { text-align: center; }
+        #number,
+        #name {
+            display: inline-block;
+            font-size: 20px;
+            line-height: 100%;
+            height: 100%;
+            width: 46%;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        #number { margin-right: 4%; }
+        #name { margin-left: 4%; }
+        .container .table .noTopBorder { border: 0px; }
+        #red { color: red; }
+        #power {
+            font-size: 20px;
+            margin: 0px auto;
+            margin-top: 10px;
+            width: 360px;
+            text-align: center;
+            visibility: hidden;
+        }
+        .res{
+            display: none;
+            margin: 0px auto;
+            margin-top: 5rem;
+            display: none;
+        }
+        .res-p{
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        @media screen and (min-width: 480px) {
+            .container {
+                width: 385px;
+            }
+        }
+    </style>
+    <!-- <link rel="stylesheet" href="toastr.min.css"> -->
+    <link href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122822246-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-122822246-1');
+    </script>
+</head>
+<body id="p">
+<div style="position: absolute;height: 100%;width: 100%;background: gray;
+    z-index: 99;opacity: 0.2;" id="cover">
+</div>
+<div style="width:100%;text-align: center;position: absolute;z-index: 100;top: 30rem;">
+    <img id="loading" src="/static/img/loading.gif" />
+</div>
+
+<div id="grade" style="margin-top: 0rem;padding-top: 5rem;padding-bottom: 2rem;" class="container animated">
+    <div  style="text-align: center;">
+       我的成绩
+    </div>
+    <form class="form-signin">
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;姓&nbsp;&nbsp;名&nbsp;</div>
+            <input type="text" disabled id="resName" class="form-control" >
+        </div>
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;准考证号&nbsp;</div>
+            <input id="num"  disabled type="text" class="form-control">
+        </div>
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;学校&nbsp;</div>
+            <input id="school"  disabled type="text" class="form-control">
+        </div>
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;写作和翻译&nbsp;</div>
+            <input id="wAndt"  disabled type="text" class="form-control">
+        </div>
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;阅读&nbsp;</div>
+            <input id="reading"  disabled type="text" class="form-control">
+        </div>
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;听力&nbsp;</div>
+            <input id="listening"  disabled type="text" class="form-control">
+        </div>
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;考试级别&nbsp;</div>
+            <input id="type"  disabled type="text" class="form-control">
+        </div>
+        <div  class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;总分&nbsp;</div>
+            <input id="total"  disabled type="text" class="form-control">
+        </div>
+    </form>
+</div>
+<div class="container animated" id="login">
+    <form class="form-signin">
+        <img src="/static/img/GDPU.jpg" id="gdpu" class="animated">
+        <div id="d1" class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;身份证号&nbsp;</div>
+            <input type="text"  class="form-control" id="idNum" autofocus>
+        </div>
+        <div id="d2" class="form-group input-group animated">
+            <div class="input-group-addon">&nbsp;姓&nbsp;&nbsp;名&nbsp;</div>
+            <input type="text"  class="form-control" id="yourName">
+        </div>
+        <div id="d3" class="form-group input-group animated">
+            <div class="input-group-addon">验证码</div>
+            <input type="text" class="form-control" id="verifyCode">
+            <div style="padding: 0px;" class="input-group-addon" >
+                <img style="width: 10rem" src="/numCode" id="change">
+            </div>
+        </div>
+    </form>
+    <div id="d4" class="form-signin animated">
+        <button type="submit" class="btn btn-lg btn-primary btn-block" id="query">查询</button>
+    </div>
+</div>
+
+<div class="blockquote-reverse container animated" id="power">Powered by <cite><u>校团委网络中心</u></cite></div>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+
+<script>
+    $('#loading').hide();
+    $('#cover').hide();
+    $('#grade').hide();
+    $(function () {
+        $("#power").css("top", screen.availHeight * 0.82 + "px");
+        setTimeout(() => {
+            $("#login").css("visibility", "visible");
+            $("#login").addClass("fadeInUp");
+        }, 300);
+        setTimeout(() => {
+            $("#d1").css("visibility", "visible");
+        $("#d1").addClass("fadeInLeft");
+        $("#d2").css("visibility", "visible");
+        $("#d2").addClass("fadeInRight");
+        $("#d3").css("visibility", "visible");
+        $("#d3").addClass("fadeInLeft");
+        $("#d4").css("visibility", "visible");
+        $("#d4").addClass("fadeInRight");
+    }, 1200);
+        setTimeout(() => {
+            $("#power").css("visibility", "visible");
+        $("#power").addClass("fadeInDown");
+    }, 2000);
+        setTimeout(() => {
+            $("#gdpu").addClass("rubberBand");
+    }, 2500);
+
+        var u = $('#idNum');
+        var p = $('#yourName');
+        var c = $('#verifyCode');
+        var mutex = 1;
+        var count = 0;
+        function cd() {
+            mutex = 0;
+            setTimeout(function() {
+                mutex = 1;
+                count = 0;
+            },5000);
+        }
+        $('#change').click(function () {
+            count = count + 1;
+            if (mutex) {
+                $('#change').attr("src", "/numCode?id=" + new Date());
+                cd();
+            } else {
+                if(count == 2) {
+                    toastr.info("限制为至少五秒才能获取一次验证码哟~~");
+                }
+            }
+        });
+        toastr.options.positionClass = "toast-top-center";
+
+        var f = function () {
+            $('#loading').show();
+            $('#cover').show();
+            $.ajax({
+                    type: "POST",
+                    url: "/getNum",
+                    data: {
+                        num: u.val(),
+                        name: p.val(),
+                        code: c.val(),
+                    },
+                    success: function (result) {
+                        $('#loading').hide();
+                        $('#cover').hide();
+                        if (!result.success) {
+                            toastr.error(result.msg);
+                        }  else {
+                            $("body").css({"background-color": "rgb(232,236,239)"});
+                            $("#power").removeClass("fadeInDown");
+                            $("#power").css("opacity", "0");
+                            var u_value = u.val();
+                            $("#login").removeClass("fadeInUp");
+                            $("#login").addClass("fadeOutUp");
+                            getGrade(result.data,p.val());
+                            $('#num').val(result.data);
+                            $('#resName').val(p.val());
+                        }
+                    }
+                })
+        }
+        var getGrade=function(sid,name){
+            console.log('查成绩')
+            $('#loading').show();
+            $('#cover').show();
+            $.ajax({
+                type: "POST",
+                url: "/getGrade",
+                data: {
+                    sid: sid,
+                    name: name,
+                },
+                success: function (result) {
+                    console.log(result)
+                    $('#loading').hide();
+                    $('#cover').hide();
+                    var data = result.data;
+                    $('#school').val(data['学校'])
+                    $('#reading').val(data['阅读'])
+                    $('#wAndt').val(data['写作和翻译'])
+                    $('#listening').val(data['听力'])
+                    $('#type').val(data['考试级别'])
+                    $('#total').val(data['总分'])
+                    $('#grade').show();
+                }
+            })
+        }
+        $('#query').click(f);
+        $(document.body).keydown(function (event) {
+            if (event.which == 13)
+                f();
+        });
+    });
+</script>
+</body>
+</html>
